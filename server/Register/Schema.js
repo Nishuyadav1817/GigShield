@@ -27,6 +27,7 @@ const Worker=new Schema({
         type:Number,
         max:60,
         min:12,
+          required:true,
        
        },
        password:{
@@ -37,17 +38,28 @@ const Worker=new Schema({
 
     platform:{
     type:String,
-    //required:true,
+    required:true,
     minLength:3,
     maxLength:30
     },
 
-    Typeofwork:{
-    type:String,
-    // required:true,
+   Address:{
+     type:String,
+    required:true,
     minLength:3,
-    maxLength:30
-    }
+    maxLength:300
+   },
+   Phonenumber:{
+    type:Number,
+    required:true,
+    minLength:10,
+    maxLength:12
+   },
+   plan:{
+     type:String,
+        enum:["user","admin","none"],
+        default:'none'
+   }
 
       
        

@@ -6,6 +6,7 @@ const WorkerAuth=require("../Register/Reg")
 const cookiparcer=require('cookie-parser')
 App.use(cookiparcer());
 require("dotenv").config();
+const cors = require("cors");
 
 App.use("/worker",WorkerAuth);
 const allowedOrigins = [
@@ -13,7 +14,7 @@ const allowedOrigins = [
   
 ];
 
-app.use(cors({
+App.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);

@@ -4,7 +4,8 @@ const Worker=require('./Schema');
 const WorkerAuth=express.Router();
 const bcrypt=require('bcrypt');
 const Jwt=require('jsonwebtoken')
-
+const Redis=require('../Main/Radis');
+const UserVerify=require("../Middlewere/usermidlewere")
 //Register of worker
 WorkerAuth.post("/register",async(req,res) =>{
 
@@ -17,7 +18,19 @@ WorkerAuth.post("/register",async(req,res) =>{
 
         const NewWorker=await Worker.create(req.body);
        
-        res.send("User created")
+     const Token=Jwt.sign({_id:NewWorker._id,EmailId:NewWorker.EmailId},process.env.JWT_KEY,{expiresIn:60*60});
+     res.cookie('Token',Token,{maxAge: 60*60*1000})
+   const reply = {
+            firstName: NewWorker.FirstName,
+            emailId:NewWorker.EmailId,
+            
+        }
+   
+  res.status(200).json({ 
+        user: reply, 
+          Token,
+        message: "User registered successfully" });
+
          
      }catch(err){
         console.log(err)
@@ -26,7 +39,7 @@ WorkerAuth.post("/register",async(req,res) =>{
 })
 
 
-
+//login
 WorkerAuth.post("/login" ,async(req,res) =>{
     try{
 
@@ -56,7 +69,7 @@ WorkerAuth.post("/login" ,async(req,res) =>{
             firstName: user.FirstName,
             emailId: user.EmailId,
             _id: user._id,
-            role:user.role
+           
         }
      console.log(reply)
      res.status(200).json({ 
@@ -72,4 +85,24 @@ WorkerAuth.post("/login" ,async(req,res) =>{
 
 })
 
+//logout
+WorkerAuth.post("/logout",UserVerify,async(req,res) =>{
+     
+    try{
+       
+    const {Token}=req.cookies;
+
+    const payload=Jwt.decode(Token);
+
+        await Redis.set(`token:${Token}`,'Blocked');
+        await Redis.expireAt(`token:${Token}`,payload.exp);
+    
+
+    res.cookie("token",null,{expires: new Date(Date.now())});
+ 
+    }
+    catch(err){
+        res.send("invalid error" +err)
+    }
+})
 module.exports=WorkerAuth;
