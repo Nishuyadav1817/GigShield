@@ -43,7 +43,7 @@ body {
   cursor:pointer;
 }
 
-.btn-outline{
+.btn-outline,user-name{
   border:1px solid #ccc;
   background:white;
   padding:10px 20px;
