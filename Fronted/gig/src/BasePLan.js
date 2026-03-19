@@ -40,7 +40,10 @@ export default function Payment() {
       setUser(JSON.parse(stored));
     }
   }, [navigate]);
-if (!user) return null;
+
+  // Prevent ESLint no-unused-vars error
+  if (!user && !redirecting) return null;
+
   /* Create order + open Razorpay */
   async function handlePayment() {
     setStatus("loading");
@@ -77,19 +80,15 @@ if (!user) return null;
         name: "GIGBima",
         description: "Basic Plan ₹25/week",
         order_id: data.orderId,
-
         prefill: {
           name: data.userName,
           email: data.userEmail,
           contact: data.userPhone,
         },
-
         theme: { color: "#2563eb" },
-
         handler: async (response) => {
           await verifyPayment(response);
         },
-
         modal: {
           ondismiss: () => setStatus("idle"),
         },
@@ -137,7 +136,6 @@ if (!user) return null;
       if (!res.ok) throw new Error(data.message || "Verification failed");
 
       const updated = { ...user, plan: "basic" };
-
       localStorage.setItem("user", JSON.stringify(updated));
       setUser(updated);
 
@@ -169,116 +167,65 @@ if (!user) return null;
     return (
       <div className="p-page">
         <div className="p-success-box">
-
           <div className="p-check">✓</div>
-
           <h2>Payment Successful</h2>
-
           <p>Your Basic Plan is now active.</p>
-
-          <button onClick={() => navigate("/")}>
-            Back to Home
-          </button>
-
+          <button onClick={() => navigate("/")}>Back to Home</button>
         </div>
       </div>
     );
   }
 
   /* Main Payment UI */
-
   return (
     <div className="p-page">
-
       <div className="p-layout">
-
         {/* LEFT SIDE */}
-
         <div className="p-left">
-
           <div className="p-tag">BASIC PLAN</div>
-
-          <h1 className="p-headline">
-            Protect your income today
-          </h1>
-
+          <h1 className="p-headline">Protect your income today</h1>
           <p className="p-subtext">
-            Affordable protection for gig workers against weather,
-            curfew, strike, and health disruptions.
+            Affordable protection for gig workers against weather, curfew, strike, and health disruptions.
           </p>
-
           <div className="p-price">
             ₹499 <span>/ year</span>
           </div>
-
           <ul className="p-perks">
             <li>₹700/day for weather disruption</li>
             <li>₹700/day for curfew or strike</li>
             <li>₹500/day for health or injury</li>
             <li>24/7 claim support</li>
           </ul>
-
           <div className="p-user-strip">
             {user?.firstName || user?.FullName} • {user?.emailId || user?.EmailId}
           </div>
-
         </div>
 
         {/* RIGHT SIDE */}
-
         <div className="p-right">
-
           {/* QR Payment */}
-
           <div className="p-qr-block">
-
             <p>Pay via UPI</p>
-
             <div className="p-qr-img-wrap">
-              <img
-                src={qrImg }
-                alt="UPI QR"
-              />
+              <img src={qrImg} alt="UPI QR" />
             </div>
-
             <div className="p-upi-id">yourupi@razorpay</div>
-
-            <div className="p-apps">
-              GPay • PhonePe • Paytm • BHIM
-            </div>
-
+            <div className="p-apps">GPay • PhonePe • Paytm • BHIM</div>
           </div>
 
           <div className="p-divider">or</div>
 
           {/* Error */}
-
-          {status === "error" && (
-            <div className="p-error">
-              {errorMsg}
-            </div>
-          )}
+          {status === "error" && <div className="p-error">{errorMsg}</div>}
 
           {/* Pay Button */}
-
-          <button
-            className="p-pay-btn"
-            onClick={handlePayment}
-            disabled={status === "loading"}
-          >
-            {status === "loading"
-              ? "Processing..."
-              : "Pay ₹499"}
+          <button className="p-pay-btn" onClick={handlePayment} disabled={status === "loading"}>
+            {status === "loading" ? "Processing..." : "Pay ₹499"}
           </button>
 
-          <p className="p-secure">
-            Secure payment powered by Razorpay
-          </p>
-
+          <p className="p-secure">Secure payment powered by Razorpay</p>
         </div>
-
       </div>
-
     </div>
   );
 }
