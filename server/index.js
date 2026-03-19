@@ -35,7 +35,7 @@ const BuildConnection=async () => {
           await Promise.all([DataBase()])
             console.log("DB conneacted")
 
-           App.listen(16016,()=>{
+           App.listen(process.env.PORT,()=>{
            console.log("App Listen on given port number 16016")
            })
 
