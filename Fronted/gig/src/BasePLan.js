@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import qrImg from './WhatsApp Image 2026-03-20 at 12.20.02 AM.jpeg';
 
 /* Load Razorpay script */
 function loadRazorpay() {
@@ -40,7 +40,7 @@ export default function Payment() {
       setUser(JSON.parse(stored));
     }
   }, [navigate]);
-
+if (!user) return null;
   /* Create order + open Razorpay */
   async function handlePayment() {
     setStatus("loading");
@@ -236,7 +236,7 @@ export default function Payment() {
 
             <div className="p-qr-img-wrap">
               <img
-                src={`Fronted/gig/src/WhatsApp Image 2026-03-20 at 12.20.02 AM.jpeg`}
+                src={qrImg }
                 alt="UPI QR"
               />
             </div>
