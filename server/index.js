@@ -11,13 +11,18 @@ App.use(cookieParser());
 require("dotenv").config();
 const cors = require("cors");
 
+
 const allowedOrigins = [
-  "https://gig-bima.vercel.app"
+  "https://gig-bima.vercel.app",
+  "http://localhost:1234"
 ];
 
+
+
 App.use(cors({
-  origin: allowedOrigins,
+  origin: true,
   credentials: true
+
 }));
 
 App.use("/worker", WorkerAuth);
