@@ -36,7 +36,9 @@ function Register() {
       alert(data.message || "Registered Successfully");
       
       if (data.token) {
+
         localStorage.setItem("token", data.token);
+        console.log(data.token);
       }
        if (response.ok) {
       navigate("/");  
