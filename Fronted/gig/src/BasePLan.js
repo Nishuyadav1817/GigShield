@@ -188,7 +188,7 @@ export default function Payment() {
             Affordable protection for gig workers against weather, curfew, strike, and health disruptions.
           </p>
           <div className="p-price">
-            ₹499 <span>/ year</span>
+            ₹25 <span>/ week</span>
           </div>
           <ul className="p-perks">
             <li>₹700/day for weather disruption</li>
