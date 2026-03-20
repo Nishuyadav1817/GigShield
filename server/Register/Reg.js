@@ -89,7 +89,7 @@ WorkerAuth.post("/login" ,async(req,res) =>{
 })
 
 //logout
-WorkerAuth.post("/logout",UserVerify,async(req,res) =>{
+WorkerAuth.post("/logout",async(req,res) =>{
      
     try{
        
@@ -114,7 +114,7 @@ const razorpay = new Razorpay({
   key_secret:process.env.RAZORPAY_KEY_SECRET
 });
 
-WorkerAuth.post("/base", UserVerify, async (req, res) => {
+WorkerAuth.post("/base",  async (req, res) => {
   const { action, userId } = req.body;
 
   if (!userId) return res.status(400).json({ message: "userId is required" });
